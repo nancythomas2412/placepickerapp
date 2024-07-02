@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { sortPlacesByDistance } from "./loc.js";
 import Places from "./components/Places.jsx";
 import { AVAILABLE_PLACES } from "./data.js";
@@ -9,7 +9,7 @@ import logoImg from "./assets/logo.png";
 const storedIds = JSON.parse(localStorage.getItem("selectedPlaces")) || [];
 const storedPlaces = storedIds.map((id) =>
   AVAILABLE_PLACES.find((place) => place.id === id)
-);//example of side effects that don't need useEffect hook
+); //example of side effects that don't need useEffect hook
 
 function App() {
   const selectedPlace = useRef();
@@ -55,7 +55,7 @@ function App() {
     }
   } //this is also yet another example of side effect, but won't create a infinite loop like navigator in line 16
 
-  function handleRemovePlace() {
+  const handleRemovePlace = useCallback(function handleRemovePlace() {//useCallback Hook
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
@@ -70,7 +70,7 @@ function App() {
         })
       )
     );
-  }
+  }, []);
 
   return (
     <>
